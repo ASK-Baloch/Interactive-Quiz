@@ -1,0 +1,88 @@
+Good ui 
+questions correct  
+false questions  
+both by ui 
+forward previous
+average accuracy time taken 
+light dark mode
+summary as a result . with ui saying good or bad job 
+
+
+
+
+
+
+import { useState } from 'react';
+
+function Quiz() {
+  const questions = [
+    {
+      question: 'What is the capital of France?',
+      options: ['Paris', 'London', 'Berlin', 'Madrid'],
+      answer: 'Paris',
+    },
+    {
+      question: 'What is the largest planet in our solar system?',
+      options: ['Jupiter', 'Saturn', 'Uranus', 'Neptune'],
+      answer: 'Jupiter',
+    },
+    {
+      question: 'What is the smallest country in the world?',
+      options: ['Monaco', 'Vatican City', 'Nauru', 'Tuvalu'],
+      answer: 'Vatican City',
+    },
+  ];
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [showScore, setShowScore] = useState(false);
+  const [score, setScore] = useState(0);
+
+  const handleAnswerOptionClick = (answer:any) => {
+    if (answer === questions[currentQuestion].answer) {
+      setScore(score + 1);
+    }
+
+    setSelectedAnswer(answer);
+  };
+
+  const handleNextQuestionClick = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setShowScore(true);
+    }
+  };
+
+  const handleRestartQuizClick = () => {
+    setShowScore(false);
+    setScore(0);
+    setCurrentQuestion(0);
+    setSelectedAnswer(null);
+  };
+
+  return (
+    <div className="container mx-auto">
+      {showScore ? (
+        <div className="flex flex-col items-center justify-center h-screen">
+          <h1 className="text-3xl font-bold mb-4">You scored {score} out of {questions.length}</h1>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleRestartQuizClick}>Restart Quiz</button>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center h-screen">
+          <div className="bg-white p-10 rounded-lg shadow-md">
+            <h2 className="text-xl font-bold mb-4">{questions[currentQuestion].question}</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {questions[currentQuestion].options.map((option) => (
+                <button key={option} className={`p-4 ${selectedAnswer === option ? "bg-blue-500 text-white" : "bg-gray-100"}`} onClick={() => handleAnswerOptionClick(option)}>{option}</button>
+              ))}
+            </div>
+            <button className={`mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ${selectedAnswer === null ? "opacity-50 cursor-not-allowed" : ""}`} onClick={handleNextQuestionClick} disabled={selectedAnswer === null}>Next Question</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Quiz
